@@ -14,6 +14,7 @@ This is an R Markdown document. Markdown is a simple formatting syntax for autho
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 ```{r}
 library(tidyverse)
+library(tidyr)
 library(dplyr)
 
 ```
@@ -28,7 +29,7 @@ path
 
 ```{r}
 
-setwd("C:/Users/Uzma/CUNY_SPS_PROJECTS/Data_607_Project_2")
+setwd("C:/Users/Uzma/CUNY_SPS_PROJECTS/Data_607_Project2")
 
 ```
 
@@ -36,16 +37,88 @@ setwd("C:/Users/Uzma/CUNY_SPS_PROJECTS/Data_607_Project_2")
 ```{r}
 library(readr)
 
-dataset1 <- read_csv("C:/Users/Uzma/CUNY_SPS_PROJECTS/Data_607_Project_2/census_us_county_data.csv")
+dataset1 <- read_csv("C:/Users/Uzma/CUNY_SPS_PROJECTS/Data_607_Project2/census_us_county_data.csv")
 
 ```
 
 ```{r}
-dataset2 <- read_csv("C:/Users/Uzma/CUNY_SPS_PROJECTS/Data_607_Project_2/ers_usda_education_data.csv")
+dataset2 <- read_csv("C:/Users/Uzma/CUNY_SPS_PROJECTS/Data_607_Project2/ers_usda_education_data.csv")
 ```
 
 ```{r}
-dataset3 <- read_csv("C:/Users/Uzma/CUNY_SPS_PROJECTS/Data_607_Project_2/county_fips_data.csv")
+dataset3 <- read_csv("C:/Users/Uzma/CUNY_SPS_PROJECTS/Data_607_Project2/county_fips_data.csv")
+```
+
+```{r}
+head(dataset1)
+```
+
+# Make the column names lowercase
+
+```{r}
+names(dataset1) <- tolower(names(dataset1))    # Convert colnames to lower case
+dataset1  
+```
+# Seperating a column into two columns dataset1
+
+```{r}
+dataset1 <- dataset1 %>% separate(name, c("county", "state"), ",")
+
+dataset1
+```
+
+# Dropping duplicates
+```{r}
+dataset1 <- dataset1 %>% distinct()
+
+dataset1
+```
+
+# Renaming the columns
+```{r}
+names(dataset1)[4:9] <- c('median_age', 'household_income', 'per_capita_income', 'poverty_count',
+                     'poverty_rate', 'unemployment_rate')
+
+dataset1
+```
+
+# Removing the string 'county'
+```{r}
+dataset1$county <-gsub(" County","",as.character(dataset1$county))
+
+dataset1
+```
+
+```{r}
+glimpse(dataset1)
+```
+
+```{r}
+str(dataset1)
+```
+
+```{r}
+dataset1$state <- trimws(dataset1$state, which = c("left"))
+
+str(dataset1)
+
+```
+
+```{r}
+# sort by state and county
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
 ```
 
 ```{r}
