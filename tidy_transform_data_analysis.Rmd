@@ -106,7 +106,9 @@ str(dataset1)
 
 ```{r}
 # sort by state and county
+# sort the dataframe in R using arrange
 
+arrange(dataset1,state, county)
 ```
 
 ```{r}
