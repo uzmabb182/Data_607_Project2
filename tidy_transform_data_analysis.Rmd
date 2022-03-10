@@ -108,22 +108,65 @@ str(dataset1)
 # sort by state and county
 # sort the dataframe in R using arrange
 
-arrange(dataset1,state, county)
+dataset1 <- arrange(dataset1,state, county)
+
+dataset1
+```
+
+# Step 1: Select data frame
+# Step 2: Group data
+# Step 3: Summarize the data
+# Step 4: Plot the summary statistics
+```{r}
+library(ggplot2)
+# Step 1
+dataset1 %>% 
+#Step 2
+group_by(state) 
+
+
+```
+# Multiple columns data by bar plot:
+```{r}
+# First filter the state Alabama and selecting the columns 
+
+data_alabama <- dataset1 %>% filter(state == "Alabama") %>%
+
+  select(c(3:9, 1))
+
+data_alabama
+```
+```{r}
+str(data_alabama)
+```
+
+
+# Transform the table from wide form to long form
+```{r}
+data_al <- data_alabama %>%
+
+  pivot_longer(cols = c(2:8),
+
+               names_to = "Variable",
+
+               values_to = "Value")
+
+data_al
 ```
 
 ```{r}
+bar_plot <- ggplot(data = data_al, aes(x = Variable, y = Value, fill = Variable)) +
 
-```
-
-```{r}
-
-```
-
-```{r}
-
-```
-
-```{r}
+  geom_bar(stat = "identity") + coord_flip() +
+  
+  labs(
+        x = "Variables",
+        y = "Values",
+        title = paste(
+            "Census data for Alabama"
+        )
+)
+bar_plot
 
 ```
 
