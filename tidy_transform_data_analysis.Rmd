@@ -1,5 +1,5 @@
 ---
-title: "Data 607-Tidying and Tranformation Data"
+title: "Data 607-Tidying and Transforming Data"
 output: html_document
 ---
 
