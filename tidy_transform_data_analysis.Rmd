@@ -12,6 +12,9 @@ knitr::opts_chunk$set(echo = TRUE)
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+Loading Libraries:
+
 ```{r}
 library(tidyverse)
 library(tidyr)
@@ -48,7 +51,7 @@ dataset2 <- read_csv("C:/Users/Uzma/CUNY_SPS_PROJECTS/Data_607_Project2/ers_usda
 ```{r}
 dataset3 <- read_csv("C:/Users/Uzma/CUNY_SPS_PROJECTS/Data_607_Project2/county_fips_data.csv")
 ```
-# Cleaning census_us_county_data:
+# Cleaning/Transforming census_us_county_data, dataset2:
 ```{r}
 head(dataset1)
 ```
@@ -112,12 +115,14 @@ dataset1 <- arrange(dataset1,state, county)
 
 dataset1
 ```
-# fillna with 0 in dataset1
+# fill NA with 0 in dataset1
 ```{r}
+dataset1[is.na(dataset1)] <- 0
 
+dataset1
 ```
 
-
+# Analysis:
 # Step 1: Select data frame
 # Step 2: Group data
 # Step 3: Summarize the data
@@ -135,20 +140,20 @@ group_by(state)
 ```{r}
 # First filter the state Alabama and selecting the columns 
 
-data_alabama <- dataset1 %>% filter(state == "Alabama") %>%
+dataset1_alabama <- dataset1 %>% filter(state == "Alabama") %>%
 
   select(c(3:9, 1))
 
-data_alabama
+dataset1_alabama
 ```
 ```{r}
-str(data_alabama)
+str(dataset1_alabama)
 ```
 
 
 # Transform the table from wide form to long form
 ```{r}
-data_al <- data_alabama %>%
+data1_al <- dataset1_alabama %>%
 
   pivot_longer(cols = c(2:8),
 
@@ -156,11 +161,11 @@ data_al <- data_alabama %>%
 
                values_to = "Value")
 
-data_al
+data1_al
 ```
 
 ```{r}
-bar_plot <- ggplot(data = data_al, aes(x = Variable, y = Value, fill = Variable)) +
+bar_plot <- ggplot(data = data1_al, aes(x = Variable, y = Value, fill = Variable)) +
 
   geom_bar(stat = "identity") + coord_flip() +
   
@@ -174,7 +179,7 @@ bar_plot <- ggplot(data = data_al, aes(x = Variable, y = Value, fill = Variable)
 bar_plot
 
 ```
-# Cleaning ers_usda_education_data:
+# Cleaning/Transforming ers_usda_education_data, dataset2:
 ```{r}
 head(dataset2)
 ```
@@ -240,9 +245,11 @@ dataset2 <- dataset2[-c(seq(1, 1, by=0)),]
 
 dataset2
 ```
-# fill null with 0 in dataset3
+# fill NA with 0 in dataset3
 ```{r}
+dataset2[is.na(dataset2)] <- 0
 
+dataset2
 ```
 
 ```{r}
@@ -263,11 +270,50 @@ dataset2
 glimpse(dataset2)
 ```
 
-
-# Now tidying dataset3
+# Analysis:
+# Multiple columns data by bar plot:
 ```{r}
+# First filter the state Alabama and selecting the columns 
+
+dataset2_alabama <- dataset2 %>% filter(county == "Alabama") %>%
+
+  select(c(3, 4, 5, 6, 7, 8, 9, 10))
+
+dataset2_alabama
+
+```
+
+# Transform the table from wide form to long form
+```{r}
+data2_al <- dataset2_alabama %>%
+
+  pivot_longer(cols = c(2:8),
+
+               names_to = "Variable",
+
+               values_to = "Value")
+
+data2_al
+
+```
+
+```{r}
+
+
+p <- ggplot(data = data2_al, aes(x = Variable, y = Value)) +
+
+  geom_bar(stat = "identity") + coord_flip()
+
+p
+```
+
+# Tidying/Transforming dataset3
+```{r}
+# Now tidying dataset3
+
 head(dataset3)
 ```
+
 # Making column names lowercase
 ```{r}
 names(dataset3) <- tolower(names(dataset3))    # Convert colnames to lower case
@@ -279,6 +325,11 @@ dataset3$county_name <-gsub(" County","",as.character(dataset3$county_name))
 
 dataset3
 ```
+# Fill NA with 0
+```{r}
+dataset3[is.na(dataset3)] <- 0
+```
+
 
 ```{r}
 str(dataset3)
@@ -301,11 +352,11 @@ path
 # Export file as csv to working directory.  
 
 write.csv(dataset1, file.path(path, "cleaned_dataset1.csv"))
+write.csv(dataset2, file.path(path, "cleaned_dataset2.csv"))
+write.csv(dataset3, file.path(path, "cleaned_dataset3.csv"))
 
 ```
 
-```{r}
 
-```
 
 
