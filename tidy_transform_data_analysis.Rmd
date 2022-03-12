@@ -48,7 +48,7 @@ dataset2 <- read_csv("C:/Users/Uzma/CUNY_SPS_PROJECTS/Data_607_Project2/ers_usda
 ```{r}
 dataset3 <- read_csv("C:/Users/Uzma/CUNY_SPS_PROJECTS/Data_607_Project2/county_fips_data.csv")
 ```
-
+# Cleaning census_us_county_data:
 ```{r}
 head(dataset1)
 ```
@@ -103,7 +103,7 @@ dataset1$state <- trimws(dataset1$state, which = c("left"))
 str(dataset1)
 
 ```
-
+# Sorting by columns
 ```{r}
 # sort by state and county
 # sort the dataframe in R using arrange
@@ -112,6 +112,11 @@ dataset1 <- arrange(dataset1,state, county)
 
 dataset1
 ```
+# fillna with 0 in dataset1
+```{r}
+
+```
+
 
 # Step 1: Select data frame
 # Step 2: Group data
@@ -169,16 +174,133 @@ bar_plot <- ggplot(data = data_al, aes(x = Variable, y = Value, fill = Variable)
 bar_plot
 
 ```
+# Cleaning ers_usda_education_data:
+```{r}
+head(dataset2)
+```
+```{r}
+colnames(dataset2)
+```
 
+
+# Dropping 4:32 columns
+```{r}
+
+dataset2 <- select(dataset2, -(4:32))
+                           
+
+dataset2
+```
+# Rename the columns by removing space with underscore
+```{r}
+names(dataset2) <- gsub(" ", "_", names(dataset2))
+
+dataset2
+```
+# Removing  comma from column names
+```{r}
+names(dataset2) <- gsub(",", "", names(dataset2))
+
+dataset2
+```
+# Removing  apostrophy from column names
+```{r}
+names(dataset2) <- gsub("'", "", names(dataset2))
+
+dataset2
+```
+```{r}
+names(dataset2) <- gsub("-", "_", names(dataset2))
+
+dataset2
+```
+
+
+# Making column names to lowercase
+```{r}
+names(dataset2) <- tolower(names(dataset2))    # Convert colnames to lower case
+dataset2
+```
+
+# Removing the string  'county' from 'area_name'
+```{r}
+dataset2$area_name <-gsub(" County","",as.character(dataset2$area_name))
+
+dataset2
+```
+# Dropping the duplicate rows
+```{r}
+dataset2 <- dataset2 %>% distinct()
+
+dataset2
+```
+# Drop first row
+```{r}
+dataset2 <- dataset2[-c(seq(1, 1, by=0)),]
+
+dataset2
+```
+# fill null with 0 in dataset3
 ```{r}
 
 ```
 
 ```{r}
+names(dataset2)[3] <- c('county')
+
+dataset2
+```
+
+```{r}
+# sort by state and county
+# sort the dataframe in R using arrange
+
+dataset2 <- arrange(dataset2,state, county)
+
+dataset2
+```
+```{r}
+glimpse(dataset2)
+```
+
+
+# Now tidying dataset3
+```{r}
+head(dataset3)
+```
+# Making column names lowercase
+```{r}
+names(dataset3) <- tolower(names(dataset3))    # Convert colnames to lower case
+dataset3
+```
+# Removing the string 'county' from 'county_name'
+```{r}
+dataset3$county_name <-gsub(" County","",as.character(dataset3$county_name))
+
+dataset3
+```
+
+```{r}
+str(dataset3)
+```
+
+```{r}
+glimpse(dataset3)
+```
+
+# Checking the working directory path and exporting data frame into a CSV file
+```{r}
+# Get working directory path
+path <- getwd()
+
+path
 
 ```
 
 ```{r}
+# Export file as csv to working directory.  
+
+write.csv(dataset1, file.path(path, "cleaned_dataset1.csv"))
 
 ```
 
