@@ -438,6 +438,19 @@ It shows District of Columbia also has the highest bachelors_degree average
 ```{r}
 by_state %>% slice(which.max(bachelors_degree))
 ```
+### We can clearly see that there is a maximum increase for poverty and education for the state of District of Columbia
+```{r}
+# We can that 
+
+by_state %>%
+  ggplot(aes(x=poverty_count, 
+             y=bachelors_degree, 
+             color=state))+
+  geom_point()+
+  geom_smooth(method="lm",se = FALSE)
+ggsave("add_regression_line_per_state_to_scatterplot_ggplot2.png")
+
+```
 
 
 ### Overall Analysis:
@@ -455,6 +468,7 @@ state <- ggplot(by_state, aes(poverty_count)) +
 state                             
 
 ```
+
 
 
 
