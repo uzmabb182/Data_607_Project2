@@ -4,7 +4,7 @@ output: html_document
 ---
 
 
-Loading Libraries:
+### Loading Libraries:
 
 ```{r}
 library(tidyverse)
@@ -13,19 +13,19 @@ library(dplyr)
 library(ggplot2)
 
 ```
-# Introduction:
+### Introduction:
 
-### There are three datasets in this file:
-### 1- Census data
-### 2- Economic Research Service -U.S.Department of Agriculture ERS-USDA data
-### 3- FIPS Code data
-### In this assignment, my aim is to perform data cleaning on all three data set, 
-### after initial analysis,merge thre three datasets on FIPS Code column and then 
-### find the co-relation between the variables and perform final analysis
+There are three datasets in this file:
+1- Census data
+2- Economic Research Service -U.S.Department of Agriculture ERS-USDA data
+3- FIPS Code data
+In this assignment, my aim is to perform data cleaning on all three data set, 
+after initial analysis,merge thre three datasets on FIPS Code column and then 
+find the co-relation between the variables and perform final analysis
 
 
 # Dataset1:
-## Reading census data from GitHub
+### Reading census data from GitHub
 
 ```{r}
 library(readr)
@@ -35,18 +35,18 @@ dataset1 <- read_csv("https://raw.githubusercontent.com/uzmabb182/Data_607_Proje
 ```
 
 
-# Cleaning/Transforming census_us_county_data, dataset1:
+### Cleaning/Transforming census_us_county_data, dataset1:
 ```{r}
 head(dataset1)
 ```
 
-# Make the column names lowercase
+### Make the column names lowercase
 
 ```{r}
 names(dataset1) <- tolower(names(dataset1))    # Convert colnames to lower case
 dataset1  
 ```
-# Seperating a column into two columns dataset1
+### Seperating a column into two columns dataset1
 
 ```{r}
 dataset1 <- dataset1 %>% separate(name, c("county", "state"), ",")
@@ -54,14 +54,14 @@ dataset1 <- dataset1 %>% separate(name, c("county", "state"), ",")
 dataset1
 ```
 
-# Dropping duplicates
+### Dropping duplicates
 ```{r}
 dataset1 <- dataset1 %>% distinct()
 
 dataset1
 ```
 
-# Renaming the columns
+### Renaming the columns
 ```{r}
 names(dataset1)[4:9] <- c('median_age', 'household_income', 'per_capita_income', 'poverty_count',
                      'poverty_rate', 'unemployment_rate')
@@ -69,7 +69,7 @@ names(dataset1)[4:9] <- c('median_age', 'household_income', 'per_capita_income',
 dataset1
 ```
 
-# Removing the string 'county'
+### Removing the string 'county'
 ```{r}
 dataset1$county <-gsub(" County","",as.character(dataset1$county))
 
@@ -90,7 +90,7 @@ dataset1$state <- trimws(dataset1$state, which = c("left"))
 str(dataset1)
 
 ```
-# Sorting by columns
+### Sorting by columns
 ```{r}
 # sort by state and county
 # sort the dataframe in R using arrange
@@ -99,18 +99,18 @@ dataset1 <- arrange(dataset1,state, county)
 
 dataset1
 ```
-# fill NA with 0 in dataset1
+### fill NA with 0 in dataset1
 ```{r}
 dataset1[is.na(dataset1)] <- 0
 
 dataset1
 ```
 
-# Analysis:
-# Step 1: Select data frame
-# Step 2: Group data
-# Step 3: Summarize the data
-# Step 4: Plot the summary statistics
+### Analysis:
+Step 1: Select data frame
+Step 2: Group data
+Step 3: Summarize the data
+Step 4: Plot the summary statistics
 ```{r}
 library(ggplot2)
 # Step 1
@@ -120,7 +120,7 @@ group_by(state)
 
 
 ```
-# Multiple columns data by bar plot:
+### Multiple columns data by bar plot:
 ```{r}
 # First filter the state Alabama and selecting the columns 
 
@@ -135,7 +135,7 @@ str(dataset1_alabama)
 ```
 
 
-# Transform the table from wide form to long form
+### Transform the table from wide form to long form
 ```{r}
 data1_al <- dataset1_alabama %>%
 
@@ -166,13 +166,13 @@ bar_plot
 
 # Dataset 2:
 
-## Reading the dataset 2 from GitHub
+### Reading the dataset 2 from GitHub
 ```{r}
 dataset2 <- read_csv("https://raw.githubusercontent.com/uzmabb182/Data_607_Project2/main/ers_usda_education_data.csv")
 ```
 
 
-# Cleaning/Transforming ers_usda_education_data, dataset2:
+### Cleaning/Transforming ers_usda_education_data, dataset2:
 ```{r}
 head(dataset2)
 ```
@@ -181,7 +181,7 @@ colnames(dataset2)
 ```
 
 
-# Dropping 4:32 columns
+### Dropping 4:32 columns
 ```{r}
 
 dataset2 <- select(dataset2, -(4:32))
@@ -189,24 +189,26 @@ dataset2 <- select(dataset2, -(4:32))
 
 dataset2
 ```
-# Rename the columns by removing space with underscore
+### Rename the columns by removing space with underscore
 ```{r}
 names(dataset2) <- gsub(" ", "_", names(dataset2))
 
 dataset2
 ```
-# Removing  comma from column names
+### Removing  comma from column names
 ```{r}
 names(dataset2) <- gsub(",", "", names(dataset2))
 
 dataset2
 ```
-# Removing  apostrophy from column names
+### Removing  apostrophy from column names
 ```{r}
 names(dataset2) <- gsub("'", "", names(dataset2))
 
 dataset2
 ```
+### Replacing dash with underscore in column names
+
 ```{r}
 names(dataset2) <- gsub("-", "_", names(dataset2))
 
@@ -214,31 +216,31 @@ dataset2
 ```
 
 
-# Making column names to lowercase
+### Making column names to lowercase
 ```{r}
 names(dataset2) <- tolower(names(dataset2))    # Convert colnames to lower case
 dataset2
 ```
 
-# Removing the string  'county' from 'area_name'
+### Removing the string  'county' from 'area_name'
 ```{r}
 dataset2$area_name <-gsub(" County","",as.character(dataset2$area_name))
 
 dataset2
 ```
-# Dropping the duplicate rows
+### Dropping the duplicate rows
 ```{r}
 dataset2 <- dataset2 %>% distinct()
 
 dataset2
 ```
-# Drop first row
+### Drop first row
 ```{r}
 dataset2 <- dataset2[-c(seq(1, 1, by=0)),]
 
 dataset2
 ```
-# fill NA with 0 in dataset3
+### fill NA with 0 in dataset3
 ```{r}
 dataset2[is.na(dataset2)] <- 0
 
@@ -267,34 +269,34 @@ glimpse(dataset2)
 
 # Dataset 3:
 
-## Reading the data from Github:
+### Reading the data from Github:
 
 ```{r}
 dataset3 <- read_csv("https://raw.githubusercontent.com/uzmabb182/Data_607_Project2/main/county_fips_data.csv")
 ```
 
 
-# Tidying/Transforming dataset3
+### Tidying/Transforming dataset3
 ```{r}
 # Now tidying dataset3
 
 head(dataset3)
 ```
 
-# Making column names lowercase
+### Making column names lowercase
 ```{r}
 names(dataset3) <- tolower(names(dataset3))    # Convert colnames to lower case
 dataset3
 ```
 
-# Removing the string 'county' from 'county_name' column values
+### Removing the string 'county' from 'county_name' column values
 
 ```{r}
 dataset3$county_name <-gsub(" County","",as.character(dataset3$county_name))
 
 dataset3
 ```
-# Rename county_name to county
+### Rename county_name to county
 
 ```{r}
 dataset3 <- rename(dataset3, county = county_name)
@@ -303,7 +305,7 @@ dataset3
 ```
 
 
-# Fill NA with 0
+### Fill NA with 0
 ```{r}
 dataset3[is.na(dataset3)] <- 0
 ```
@@ -317,14 +319,14 @@ str(dataset3)
 glimpse(dataset3)
 ```
 
-# Performing left join between Census and FIPS_Code data on 'County' data:
+### Performing left join between Census and FIPS_Code data on 'County' data:
 
 ```{r}
 joint_df <- dataset2 %>% inner_join(dataset3,by="county")
 
 joint_df
 ```
-# Now joining Census dataset1 to jointdataset
+### Now joining Census dataset1 to jointdataset
 
 ```{r}
 #combined_df<- merge(dataset1, joint_df, by = 'county', all.x= TRUE)
@@ -334,14 +336,14 @@ combined_df
 ```
 
 
-# Use the 'select' and 'one_of' functions of the dplyr package to delete columns
+### Use the 'select' and 'one_of' functions of the dplyr package to delete columns
 
 ```{r}
 col_remove <- c("state.y", "fips")     # Define columns that should be dropped
 
 ```
 
-# Removing the repeated column
+### Removing the repeated column
 ```{r}
 
 combined_df <- combined_df %>%            # Apply select & one_of functions
@@ -350,7 +352,7 @@ combined_df <- combined_df %>%            # Apply select & one_of functions
 combined_df
 ```
 
-# Rename state.x column to state
+### Rename state.x column to state
  
 ```{r}
 combined_df <- rename(combined_df, state = state.x)
@@ -358,7 +360,7 @@ combined_df <- rename(combined_df, state = state.x)
 combined_df
 ```
 
-# Remove duplicate rows of the dataframe
+### Remove duplicate rows of the dataframe
 
 ```{r}
 combined_df <- combined_df[!duplicated(combined_df[,c('county')]),]
@@ -372,7 +374,7 @@ combined_df
 ```{r}
 summary(combined_df)
 ```
-# Find the maximun percapita income state
+### Find the maximun percapita income state
 
 ```{r}
 # Get Maximum value of the column by column name
@@ -380,13 +382,16 @@ summary(combined_df)
 max(combined_df$per_capita_income)
 ```
 
-# Move column state to 1st position
+### Move column state to 1st position
 
 ```{r}
 combined_df <- combined_df %>% relocate(state, .before = population)
 
 combined_df
 ```
+
+### Group by state and finfing the average of the following indicators
+
 ```{r}
 by_state <- combined_df %>% group_by(state)
 
@@ -401,16 +406,22 @@ by_state <- by_state %>% summarise(
 
 by_state
 ```
-# Analysis: 
 
-## conneticut and Dalaware have hightest poverty count where as Wyoming and Wisconsin have the least
+### To find the highest poverty_count by state
+
 ```{r}
+library(ggplot2)
+
 ggplot(by_state, aes(fill=state, y=poverty_count, x=state)) +
-  geom_bar(position='dodge', stat='identity')
+  geom_bar(position='dodge', stat='identity',
+           color = "black", width = 0.60)
+
 
 ```
-## As the population increses, so in the poverty_count
-## There is consistentincrease in the household_income and it is not effected by population
+### To find which state exactly has the highest poverty_count in the above barplot since the sate is not detectable easily
+```{r}
+by_state %>% slice(which.max(poverty_count))
+```
 
 ```{r}
 state <- ggplot(by_state, aes(poverty_count)) +  
@@ -419,6 +430,16 @@ state <- ggplot(by_state, aes(poverty_count)) +
     geom_line(aes(y = median_age), color = "blue") +
     geom_line(aes(y = bachelors_degree), color = "purple")
 state                             
+
+```
+As the population increses, so in the poverty_count
+There is consistentincrease in the household_income and it is not effected by population
+
+```{r}
+
+```
+
+```{r}
 
 ```
 
