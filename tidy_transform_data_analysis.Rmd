@@ -262,42 +262,8 @@ dataset2
 glimpse(dataset2)
 ```
 
-# Analysis:
-# Multiple columns data by bar plot:
-```{r}
-# First filter the state Alabama and selecting the columns 
-
-dataset2_alabama <- dataset2 %>% filter(county == "Alabama") %>%
-
-  select(c(3, 4, 5, 6, 7, 8, 9, 10))
-
-dataset2_alabama
-
-```
-
-# Transform the table from wide form to long form
-```{r}
-data2_al <- dataset2_alabama %>%
-
-  pivot_longer(cols = c(2:8),
-
-               names_to = "Variable",
-
-               values_to = "Value")
-
-data2_al
-
-```
-
-```{r}
 
 
-p <- ggplot(data = data2_al, aes(x = Variable, y = Value)) +
-
-  geom_bar(stat = "identity") + coord_flip()
-
-p
-```
 # Dataset 3:
 
 ## Reading the data from Github:
@@ -353,14 +319,15 @@ glimpse(dataset3)
 # Performing left join between Census and FIPS_Code data on 'County' data:
 
 ```{r}
-joint_df <- merge(dataset2, dataset3, by = 'county', all.x= TRUE)
+joint_df <- dataset2 %>% inner_join(dataset3,by="county")
 
 joint_df
 ```
 # Now joining Census dataset1 to jointdataset
 
 ```{r}
-combined_df<- merge(dataset1, joint_df, by = 'county', all.x= TRUE)
+#combined_df<- merge(dataset1, joint_df, by = 'county', all.x= TRUE)
+combined_df = dataset1 %>% inner_join(joint_df,by="county")
 
 combined_df
 ```
@@ -373,7 +340,7 @@ col_remove <- c("state.y", "fips")     # Define columns that should be dropped
 
 ```
 
-
+# Removing the repeated column
 ```{r}
 
 combined_df <- combined_df %>%            # Apply select & one_of functions
@@ -390,28 +357,58 @@ combined_df <- rename(combined_df, state = state.x)
 combined_df
 ```
 
-
-
-
-
-# Checking the working directory path and exporting data frame into a CSV file
-```{r}
-# Get working directory path
-path <- getwd()
-
-path
-
-```
+# Remove duplicate rows of the dataframe
 
 ```{r}
-# Export file as csv to working directory.  
+combined_df <- combined_df[!duplicated(combined_df[,c('county')]),]
 
-write.csv(dataset1, file.path(path, "cleaned_dataset1.csv"))
-write.csv(dataset2, file.path(path, "cleaned_dataset2.csv"))
-write.csv(dataset3, file.path(path, "cleaned_dataset3.csv"))
-
+combined_df
 ```
 
 
+# Statistical Analysis:
 
+```{r}
+summary(combined_df)
+```
+# Find the maximun percapita income state
+
+```{r}
+# Get Maximum value of the column by column name
+ 
+max(combined_df$per_capita_income)
+```
+
+# Move column state to 1st position
+
+```{r}
+combined_df <- combined_df %>% relocate(state, .before = population)
+
+combined_df
+```
+
+
+```{r}
+# First filter the state and selecting the columns 
+
+new_df <- combined_df %>% filter(per_capita_income == max(combined_df$per_capita_income)) %>%
+
+  select(c(1, 3, 4, 5, 6, 7, 8, 9, 16))
+
+new_df
+```
+
+```{r}
+# Transform the table from wide form to long form
+
+ny_data <- new_df %>%
+
+  pivot_longer(cols = c(2:9),
+
+               names_to = "Variable",
+
+               values_to = "Value")
+
+data2_al
+```
 
