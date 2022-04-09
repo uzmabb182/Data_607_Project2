@@ -23,7 +23,8 @@ library(dplyr)
 ### find the co-relation between the variables and perform final analysis
 
 
-# Reading census data from GitHub
+# Dataset1:
+## Reading census data from GitHub
 
 ```{r}
 library(readr)
@@ -32,13 +33,7 @@ dataset1 <- read_csv("https://raw.githubusercontent.com/uzmabb182/Data_607_Proje
 
 ```
 
-```{r}
-dataset2 <- read_csv("https://raw.githubusercontent.com/uzmabb182/Data_607_Project2/main/ers_usda_education_data.csv")
-```
 
-```{r}
-dataset3 <- read_csv("https://raw.githubusercontent.com/uzmabb182/Data_607_Project2/main/county_fips_data.csv")
-```
 # Cleaning/Transforming census_us_county_data, dataset1:
 ```{r}
 head(dataset1)
@@ -167,6 +162,15 @@ bar_plot <- ggplot(data = data1_al, aes(x = Variable, y = Value, fill = Variable
 bar_plot
 
 ```
+
+# Dataset 2:
+
+## Reading the dataset 2 from GitHub
+```{r}
+dataset2 <- read_csv("https://raw.githubusercontent.com/uzmabb182/Data_607_Project2/main/ers_usda_education_data.csv")
+```
+
+
 # Cleaning/Transforming ers_usda_education_data, dataset2:
 ```{r}
 head(dataset2)
@@ -294,6 +298,14 @@ p <- ggplot(data = data2_al, aes(x = Variable, y = Value)) +
 
 p
 ```
+# Dataset 3:
+
+## Reading the data from Github:
+
+```{r}
+dataset3 <- read_csv("https://raw.githubusercontent.com/uzmabb182/Data_607_Project2/main/county_fips_data.csv")
+```
+
 
 # Tidying/Transforming dataset3
 ```{r}
@@ -307,12 +319,23 @@ head(dataset3)
 names(dataset3) <- tolower(names(dataset3))    # Convert colnames to lower case
 dataset3
 ```
-# Removing the string 'county' from 'county_name'
+
+# Removing the string 'county' from 'county_name' column values
+
 ```{r}
 dataset3$county_name <-gsub(" County","",as.character(dataset3$county_name))
 
 dataset3
 ```
+# Rename county_name to county
+
+```{r}
+dataset3 <- rename(dataset3, county = county_name)
+
+dataset3
+```
+
+
 # Fill NA with 0
 ```{r}
 dataset3[is.na(dataset3)] <- 0
@@ -326,10 +349,50 @@ str(dataset3)
 ```{r}
 glimpse(dataset3)
 ```
-# Left Join: jointdataset <- merge(ChickWeight, LabResults, by = 'Diet', all.x= TRUE)
+
+# Performing left join between Census and FIPS_Code data on 'County' data:
+
 ```{r}
+joint_df <- merge(dataset2, dataset3, by = 'county', all.x= TRUE)
+
+joint_df
+```
+# Now joining Census dataset1 to jointdataset
+
+```{r}
+combined_df<- merge(dataset1, joint_df, by = 'county', all.x= TRUE)
+
+combined_df
+```
+
+
+# Use the 'select' and 'one_of' functions of the dplyr package to delete columns
+
+```{r}
+col_remove <- c("state.y", "fips")     # Define columns that should be dropped
 
 ```
+
+
+```{r}
+
+combined_df <- combined_df %>%            # Apply select & one_of functions
+  select(- one_of(col_remove))
+
+combined_df
+```
+
+# Rename state.x column to state
+ 
+```{r}
+combined_df <- rename(combined_df, state = state.x)
+
+combined_df
+```
+
+
+
+
 
 # Checking the working directory path and exporting data frame into a CSV file
 ```{r}
