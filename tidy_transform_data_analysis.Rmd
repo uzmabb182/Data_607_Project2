@@ -12,21 +12,18 @@ library(tidyr)
 library(dplyr)
 
 ```
+# Introduction:
+
+### There are three datasets in this file:
+### 1- Census data
+### 2- Economic Research Service -U.S.Department of Agriculture ERS-USDA data
+### 3- FIPS Code data
+### In this assignment, my aim is to perform data cleaning on all three data set, 
+### after initial analysis,merge thre three datasets on FIPS Code column and then 
+### find the co-relation between the variables and perform final analysis
 
 
-```{r}
-# Get working directory path
-#path <- getwd()
-
-#path
-```
-
-```{r}
-
-#setwd("C:/Users/Uzma/CUNY_SPS_PROJECTS/Data_607_Project2")
-
-```
-
+# Reading census data from GitHub
 
 ```{r}
 library(readr)
@@ -328,6 +325,10 @@ str(dataset3)
 
 ```{r}
 glimpse(dataset3)
+```
+# Left Join: jointdataset <- merge(ChickWeight, LabResults, by = 'Diet', all.x= TRUE)
+```{r}
+
 ```
 
 # Checking the working directory path and exporting data frame into a CSV file
