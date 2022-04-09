@@ -10,6 +10,7 @@ Loading Libraries:
 library(tidyverse)
 library(tidyr)
 library(dplyr)
+library(ggplot2)
 
 ```
 # Introduction:
@@ -386,29 +387,42 @@ combined_df <- combined_df %>% relocate(state, .before = population)
 
 combined_df
 ```
+```{r}
+by_state <- combined_df %>% group_by(state)
 
+by_state <- by_state %>% summarise(
+  population = mean(population),
+  median_age = mean(median_age),
+  per_capita_income = mean(per_capita_income),
+  poverty_count = mean(poverty_count),
+  household_income = mean(household_income),
+  bachelors_degree = mean(bachelors_degree_or_higher_2015_19)
+)
+
+by_state
+```
+# Analysis: 
+
+## conneticut and Dalaware have hightest poverty count where as Wyoming and Wisconsin have the least
+```{r}
+ggplot(by_state, aes(fill=state, y=poverty_count, x=state)) +
+  geom_bar(position='dodge', stat='identity')
+
+```
+## As the population increses, so in the poverty_count
+## There is consistentincrease in the household_income and it is not effected by population
 
 ```{r}
-# First filter the state and selecting the columns 
+state <- ggplot(by_state, aes(poverty_count)) +  
+     geom_line(aes(y = population), color = "red") +
+    geom_line(aes(y = household_income), color = "green") +
+    geom_line(aes(y = median_age), color = "blue") +
+    geom_line(aes(y = bachelors_degree), color = "purple")
+state                             
 
-new_df <- combined_df %>% filter(per_capita_income == max(combined_df$per_capita_income)) %>%
-
-  select(c(1, 3, 4, 5, 6, 7, 8, 9, 16))
-
-new_df
 ```
 
-```{r}
-# Transform the table from wide form to long form
 
-ny_data <- new_df %>%
 
-  pivot_longer(cols = c(2:9),
 
-               names_to = "Variable",
-
-               values_to = "Value")
-
-data2_al
-```
 
