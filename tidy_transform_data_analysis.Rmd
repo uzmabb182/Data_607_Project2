@@ -3,15 +3,6 @@ title: "Data 607-Tidying and Transforming Data"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
 Loading Libraries:
 
@@ -25,14 +16,14 @@ library(dplyr)
 
 ```{r}
 # Get working directory path
-path <- getwd()
+#path <- getwd()
 
-path
+#path
 ```
 
 ```{r}
 
-setwd("C:/Users/Uzma/CUNY_SPS_PROJECTS/Data_607_Project2")
+#setwd("C:/Users/Uzma/CUNY_SPS_PROJECTS/Data_607_Project2")
 
 ```
 
@@ -40,18 +31,18 @@ setwd("C:/Users/Uzma/CUNY_SPS_PROJECTS/Data_607_Project2")
 ```{r}
 library(readr)
 
-dataset1 <- read_csv("C:/Users/Uzma/CUNY_SPS_PROJECTS/Data_607_Project2/census_us_county_data.csv")
+dataset1 <- read_csv("https://raw.githubusercontent.com/uzmabb182/Data_607_Project2/main/census_us_county_data.csv")
 
 ```
 
 ```{r}
-dataset2 <- read_csv("C:/Users/Uzma/CUNY_SPS_PROJECTS/Data_607_Project2/ers_usda_education_data.csv")
+dataset2 <- read_csv("https://raw.githubusercontent.com/uzmabb182/Data_607_Project2/main/ers_usda_education_data.csv")
 ```
 
 ```{r}
-dataset3 <- read_csv("C:/Users/Uzma/CUNY_SPS_PROJECTS/Data_607_Project2/county_fips_data.csv")
+dataset3 <- read_csv("https://raw.githubusercontent.com/uzmabb182/Data_607_Project2/main/county_fips_data.csv")
 ```
-# Cleaning/Transforming census_us_county_data, dataset2:
+# Cleaning/Transforming census_us_county_data, dataset1:
 ```{r}
 head(dataset1)
 ```
