@@ -397,10 +397,8 @@ by_state <- combined_df %>% group_by(state)
 
 by_state <- by_state %>% summarise(
   population = mean(population),
-  median_age = mean(median_age),
   per_capita_income = mean(per_capita_income),
   poverty_count = mean(poverty_count),
-  household_income = mean(household_income),
   bachelors_degree = mean(bachelors_degree_or_higher_2015_19)
 )
 
@@ -419,9 +417,34 @@ ggplot(by_state, aes(fill=state, y=poverty_count, x=state)) +
 
 ```
 ### To find which state exactly has the highest poverty_count in the above barplot since the sate is not detectable easily
+It shows District of Columbia has the highest poverty count
 ```{r}
 by_state %>% slice(which.max(poverty_count))
 ```
+
+### Now repeat the above graph for education
+
+```{r}
+library(ggplot2)
+
+ggplot(by_state, aes(fill=state, y=bachelors_degree, x=state)) +
+  geom_bar(position='dodge', stat='identity',
+           color = "black", width = 0.60)
+
+
+```
+### To find which state exactly has the highest education average in the above barplot since the sate is not detectable easily
+It shows District of Columbia also has the highest bachelors_degree average
+```{r}
+by_state %>% slice(which.max(bachelors_degree))
+```
+
+
+### Overall Analysis:
+
+Overall population is increasing for all states
+Overall bachelors degree education is increasing for all states
+overall household income is not showing any prominant increase
 
 ```{r}
 state <- ggplot(by_state, aes(poverty_count)) +  
@@ -430,16 +453,6 @@ state <- ggplot(by_state, aes(poverty_count)) +
     geom_line(aes(y = median_age), color = "blue") +
     geom_line(aes(y = bachelors_degree), color = "purple")
 state                             
-
-```
-As the population increses, so in the poverty_count
-There is consistentincrease in the household_income and it is not effected by population
-
-```{r}
-
-```
-
-```{r}
 
 ```
 
