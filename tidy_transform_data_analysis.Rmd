@@ -453,23 +453,6 @@ ggsave("add_regression_line_per_state_to_scatterplot_ggplot2.png")
 ```
 
 
-### Overall Analysis:
-
-Overall population is increasing for all states
-Overall bachelors degree education is increasing for all states
-overall household income is not showing any prominant increase
-
-```{r}
-state <- ggplot(by_state, aes(poverty_count)) +  
-     geom_line(aes(y = population), color = "red") +
-    geom_line(aes(y = household_income), color = "green") +
-    geom_line(aes(y = median_age), color = "blue") +
-    geom_line(aes(y = bachelors_degree), color = "purple")
-state                             
-
-```
-
-
 
 
 
